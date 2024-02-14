@@ -24,13 +24,7 @@ public class TakeOrderService {
     @Transactional
     public TakeOrderResponse takeOrder(String id, TakeOrderRequest takeOrderRequest) throws AppException {
         OrdersEntity ordersEntity = ordersRepository.findByOrderId(id);
-
-        if (ordersEntity == null) {
-            throw new AppException("Order not found");
-        }
-        if (!ordersEntity.getStatus().equals("UNASSIGNED")) {
-            throw new AppException("Order is already taken or being processed");
-        }
+        validateOrderEntity(ordersEntity);
 
         ordersEntity.setStatus(takeOrderRequest.getStatus());
         try {
@@ -42,5 +36,14 @@ public class TakeOrderService {
         TakeOrderResponse takeOrderResponse = new TakeOrderResponse();
         takeOrderResponse.setStatus("SUCCESS");
         return takeOrderResponse;
+    }
+
+    private void validateOrderEntity(OrdersEntity ordersEntity) throws AppException {
+        if (ordersEntity == null) {
+            throw new AppException("Order not found");
+        }
+        if (!ordersEntity.getStatus().equals("UNASSIGNED")) {
+            throw new AppException("Order is already taken or being processed");
+        }
     }
 }

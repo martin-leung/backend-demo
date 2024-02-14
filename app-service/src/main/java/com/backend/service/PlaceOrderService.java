@@ -1,15 +1,10 @@
 package com.backend.service;
 
-import com.backend.bo.GoogleApiBo.Distance;
-import com.backend.bo.GoogleApiBo.Element;
-import com.backend.bo.GoogleApiBo.GoogleApiResponse;
 import com.backend.bo.PlaceOrdersRequest;
 import com.backend.bo.PlaceOrdersResponse;
 import com.backend.bo.data.OrdersEntity;
 import com.backend.bo.data.OrdersRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,19 +12,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Service
 public class PlaceOrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlaceOrderService.class);
-
-
 
     @Autowired
     private OrdersRepository ordersRepository;
@@ -38,21 +25,16 @@ public class PlaceOrderService {
     private GoogleService googleService;
 
     public PlaceOrdersResponse placeOrder(PlaceOrdersRequest placeOrdersRequest) throws Exception {
-        // Validate request coordinates
         validateRequest(placeOrdersRequest);
 
-        // Generate unique order id
         String orderId = UUID.randomUUID().toString();
         LOGGER.info("Unique ID generate: {}", orderId);
 
-        // Calculate distance
         int distance = googleService.calculateDistance(placeOrdersRequest.getOrderOrigin(), placeOrdersRequest.getOrderDestination());
 
-        // save to repository
         OrdersEntity ordersEntity = transformToEntity(orderId, distance, placeOrdersRequest);
         ordersRepository.save(ordersEntity);
 
-        // Create response
         PlaceOrdersResponse placeOrdersResponse = new PlaceOrdersResponse();
         placeOrdersResponse.setId(orderId);
         placeOrdersResponse.setDistance(distance);

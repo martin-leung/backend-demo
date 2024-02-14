@@ -22,7 +22,6 @@ public class GoogleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleService.class);
 
-
     @Value("${api.key:null}")
     private String API_KEY;
 
@@ -67,5 +66,4 @@ public class GoogleService {
         }
         return distanceValue;
     }
-
 }
