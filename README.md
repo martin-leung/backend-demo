@@ -5,6 +5,7 @@ Port is 8080.
 To provide Google apiKey please input key in command line after running start.sh. 
 
 Example:
+
 ![image](https://github.com/martin-leung/backend-demo/assets/26888677/178b7557-be63-47da-a564-74b335539f86)
 
 Example URLs used to hit application:
