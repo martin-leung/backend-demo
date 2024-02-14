@@ -5,10 +5,13 @@ FROM openjdk:17-oracle
 WORKDIR /app
 
 # Copy JAR file into container
-COPY target/martapp.jar /app/martapp.jar
+COPY app-controller/target/martapp.jar /app/martapp.jar
 
 # Expose port
 EXPOSE 8080
 
+# Set JVM options
+ENV JAVA_OPTS=""
+
 # Command to run the application
-CMD ["java", "-jar", "martapp.jar"]
+CMD java $JAVA_OPTS -jar martapp.jar

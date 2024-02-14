@@ -7,3 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+  db:
+    image: h2database/h2:latest
+    ports:
+      - "1521:1521"
