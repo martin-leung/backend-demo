@@ -1,7 +1,6 @@
 package com.backend.service;
 
 import com.backend.bo.AppException;
-import com.backend.bo.TakeOrderRequest;
 import com.backend.bo.TakeOrderResponse;
 import com.backend.bo.data.OrdersEntity;
 import com.backend.bo.data.OrdersRepository;

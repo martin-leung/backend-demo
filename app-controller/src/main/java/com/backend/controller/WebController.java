@@ -1,6 +1,5 @@
 package com.backend.controller;
 
-import com.backend.bo.AppException;
 import com.backend.bo.ErrorResponse;
 import com.backend.bo.PlaceOrdersRequest;
 import com.backend.bo.TakeOrderRequest;
