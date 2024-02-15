@@ -17,5 +17,4 @@ public class AppException extends Exception {
     public AppException(Throwable cause) {
         super(cause);
     }
-
 }

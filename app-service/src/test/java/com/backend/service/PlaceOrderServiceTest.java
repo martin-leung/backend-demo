@@ -65,7 +65,7 @@ public class PlaceOrderServiceTest extends TestBase {
     @Test(dataProvider = "invalidRequests")
     public void testPlaceOrderValidationTest(PlaceOrdersRequest placeOrdersRequest) {
         try {
-            PlaceOrdersResponse response = placeOrderService.placeOrder(placeOrdersRequest);
+            placeOrderService.placeOrder(placeOrdersRequest);
             fail();
         } catch(IllegalArgumentException exception) {
 

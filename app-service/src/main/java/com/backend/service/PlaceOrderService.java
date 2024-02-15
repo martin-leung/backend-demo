@@ -1,17 +1,16 @@
 package com.backend.service;
 
+import com.backend.bo.AppException;
 import com.backend.bo.PlaceOrdersRequest;
 import com.backend.bo.PlaceOrdersResponse;
 import com.backend.bo.data.OrdersEntity;
 import com.backend.bo.data.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 @Service
 public class PlaceOrderService {
@@ -31,10 +30,16 @@ public class PlaceOrderService {
         LOGGER.info("Unique ID generate: {}", orderId);
 
         int distance = googleService.calculateDistance(placeOrdersRequest.getOrderOrigin(), placeOrdersRequest.getOrderDestination());
+        try {
+            OrdersEntity ordersEntity = transformToEntity(orderId, distance, placeOrdersRequest);
+            ordersRepository.save(ordersEntity);
+        } catch (Exception exception) {
+            throw new AppException("Error occurred while saving to database");
+        }
+        return createResponse(orderId, distance);
+    }
 
-        OrdersEntity ordersEntity = transformToEntity(orderId, distance, placeOrdersRequest);
-        ordersRepository.save(ordersEntity);
-
+    private PlaceOrdersResponse createResponse(String orderId, Integer distance) {
         PlaceOrdersResponse placeOrdersResponse = new PlaceOrdersResponse();
         placeOrdersResponse.setId(orderId);
         placeOrdersResponse.setDistance(distance);

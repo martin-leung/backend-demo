@@ -1,6 +1,5 @@
 package com.backend.service;
 
-
 import com.backend.bo.AppException;
 import com.backend.bo.Orders;
 import com.backend.bo.OrdersListData;
@@ -11,16 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class GetOrdersService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetOrdersService.class);
 
     @Autowired
     private OrdersRepository ordersRepository;
@@ -30,7 +24,7 @@ public class GetOrdersService {
         int limitInt = Integer.parseInt(limit);
 
         if (pageInt < 1 || limitInt < 1) {
-            throw new AppException("Page and limit must be positive integers");
+            throw new IllegalArgumentException("Page and limit must be positive integers");
         }
 
         List<OrdersEntity> orders = getOrdersByPage(pageInt, limitInt);
@@ -41,10 +35,16 @@ public class GetOrdersService {
         }
     }
 
-    public List<OrdersEntity> getOrdersByPage(int page, int limit) {
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        Page<OrdersEntity> ordersPage = ordersRepository.findAll(pageable);
-        return ordersPage.getContent();
+    public List<OrdersEntity> getOrdersByPage(int page, int limit) throws AppException {
+        List<OrdersEntity> ordersList = new ArrayList<>();
+        try {
+            Pageable pageable = PageRequest.of(page - 1, limit);
+            Page<OrdersEntity> ordersPage = ordersRepository.findAll(pageable);
+            ordersList = ordersPage.getContent();
+        } catch (Exception e) {
+            throw new AppException("Error while reading repository");
+        }
+        return ordersList;
     }
 
     private List<Orders> transformData(List<OrdersEntity> ordersEntityList) {

@@ -55,10 +55,7 @@ public class WebController {
             return ResponseEntity.ok(takeOrderService.takeOrder(id, takeOrderRequest));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Invalid request: " + e.getMessage()));
-        } catch (AppException appException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error occurred while processing order: " + appException.getMessage()));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Request failed due to internal server error: " + e.getMessage()));
         }
     }
